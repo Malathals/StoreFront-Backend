@@ -46,7 +46,7 @@ const create = async (req: Request, res: Response) => {
     );
     const token = jwt.sign(
       { first_name, last_name },
-      process.env.JWT_SECRET as string, 
+      process.env.JWT_SECRET as string,
     );
     res.status(201).json({
       user: createUser,
