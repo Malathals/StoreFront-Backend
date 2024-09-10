@@ -1,0 +1,19 @@
+{
+  "dev": {
+    "driver": "pg",
+    "host": "dpg-crbi6ht6l47c73d64cgg-a.oregon-postgres.render.com",
+    "database": "Storefront",
+    "user": "malath",
+    "password": "1234",
+    "ssl": {
+      "rejectUnauthorized": false
+    }
+  },
+  "test": {
+    "driver": "pg",
+    "host": "dpg-crbi6ht6l47c73d64cgg-a.oregon-postgres.render.com",
+    "database": "Storefront",
+    "user": "malath",
+    "password": "1234"
+  }
+}
