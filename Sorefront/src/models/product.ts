@@ -1,4 +1,3 @@
-import { json } from 'body-parser';
 import pool from '../database';
 
 export type product = {

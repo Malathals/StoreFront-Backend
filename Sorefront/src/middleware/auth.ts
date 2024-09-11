@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import express, { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -20,9 +20,9 @@ export const verifyToken = (
 
   try {
     const secretKey = process.env.JWT_SECRET || 'fallback-secret';
-    const decoded = jwt.verify(token, secretKey);
+    jwt.verify(token, secretKey);
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid token.' });
+    return res.status(401).json({ message: 'Invalid token.', error });
   }
 };

@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { Order, OrderTable } from '../models/order';
+import { OrderTable } from '../models/order';
 import { verifyToken } from '../middleware/auth';
 
 const orderModel = new OrderTable();

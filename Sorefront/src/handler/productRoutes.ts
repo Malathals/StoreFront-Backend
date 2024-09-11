@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { product, productTable } from '../models/product';
+import { productTable } from '../models/product';
 import { verifyToken } from '../middleware/auth';
 
 const productModel = new productTable();

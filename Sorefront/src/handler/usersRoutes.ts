@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { users, usersTable } from '../models/users';
+import { usersTable } from '../models/users';
 import { verifyToken } from '../middleware/auth';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
