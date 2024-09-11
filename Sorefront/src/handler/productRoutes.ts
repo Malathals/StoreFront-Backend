@@ -33,8 +33,8 @@ const show = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
   try {
-    const { id, name, price, category } = req.body;
-    const createProduct = await productModel.create(id, name, price, category);
+    const { name, price, category } = req.body;
+    const createProduct = await productModel.create(name, price, category);
     res.status(201).json(createProduct);
   } catch (error) {
     if (error instanceof Error) {

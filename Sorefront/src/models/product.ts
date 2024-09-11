@@ -44,17 +44,14 @@ export class productTable {
     }
   }
 
-  async create(id: number, name: string, price: number, category: string) {
+  async create(name: string, price: number, category: string) {
     try {
       const DB_connect = await pool.connect();
-      const sql = `INSERT INTO PRODUCT (ID, NAME, PRICE, CATEGORY) VALUES ($1, $2, $3, $4)`;
-      const QueryResult = await DB_connect.query(sql, [
-        id,
-        name,
-        price,
-        category,
-      ]);
+      const sql = `INSERT INTO PRODUCT ( NAME, PRICE, CATEGORY) VALUES ($1, $2, $3) RETURNING *`;
+      const QueryResult = await DB_connect.query(sql, [name, price, category]);
       console.log('insert done');
+      return QueryResult.rows[0];
+
       DB_connect.release();
     } catch (error) {
       throw new Error(`there is error, which is: ${error}`);

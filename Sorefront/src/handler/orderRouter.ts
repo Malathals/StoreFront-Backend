@@ -6,9 +6,12 @@ const orderModel = new OrderTable();
 
 const currentOrder = async (req: Request, res: Response) => {
   try {
-    const user_Id = parseInt(req.params.id);
+    console.log('Request Params:', req.params);
+
+    const user_Id = parseInt(req.params.user_id);
 
     const ListOfOrders = await orderModel.currentOrder(user_Id);
+
     res.json(ListOfOrders);
   } catch (error) {
     if (error instanceof Error) {

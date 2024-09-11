@@ -28,7 +28,7 @@ export class usersTable {
   async show(id: number): Promise<users> {
     try {
       const DB_connect = await pool.connect();
-      const sql = `SELECT * FROM USERS WHERE ID = $1`;
+      const sql = `SELECT id, first_name, last_name FROM USERS WHERE ID = $1`;
       const QueryResult = await DB_connect.query(sql, [id]);
 
       DB_connect.release();
@@ -43,26 +43,20 @@ export class usersTable {
     }
   }
 
-  async create(
-    id: number,
-    first_name: string,
-    last_name: string,
-    password: string,
-  ) {
+  async create(first_name: string, last_name: string, password: string) {
     try {
       const DB_connect = await pool.connect();
-      const sql = `INSERT INTO USERS (ID, first_name, last_name, password) VALUES ($1, $2, $3, $4)`;
+      const sql = `INSERT INTO USERS (first_name, last_name, password) VALUES ($1, $2, $3)`;
       const saltRounds = parseInt(process.env.SALT_ROUNDS || '10');
-      const salt = await bcrypt.genSalt(saltRounds);
 
-      const passWithHashing = await bcrypt.hash(password, parseInt(salt));
+      const hashedPass = await bcrypt.hash(password, saltRounds);
       const QueryResult = await DB_connect.query(sql, [
-        id,
         first_name,
         last_name,
-        passWithHashing,
+        hashedPass,
       ]);
       console.log('insert done');
+      return QueryResult.rows[0];
       DB_connect.release();
     } catch (error) {
       throw new Error(`there is error, which is: ${error}`);

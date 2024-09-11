@@ -37,13 +37,9 @@ const show = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
   try {
-    const { id, first_name, last_name, password } = req.body;
-    const createUser = await usersModel.create(
-      id,
-      first_name,
-      last_name,
-      password,
-    );
+    const { first_name, last_name, password } = req.body;
+    const createUser = await usersModel.create(first_name, last_name, password);
+
     const token = jwt.sign(
       { first_name, last_name },
       process.env.JWT_SECRET as string,
@@ -56,7 +52,7 @@ const create = async (req: Request, res: Response) => {
     if (error instanceof Error) {
       res
         .status(500)
-        .json({ message: `Error fetching product: ${error.message}` });
+        .json({ message: `Error in create user : ${error.message}` });
     }
   }
 };

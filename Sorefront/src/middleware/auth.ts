@@ -19,7 +19,7 @@ export const verifyToken = (
   const token = authHeader.split(' ')[1];
 
   try {
-    const secretKey = process.env.JWT_SECRT || 'fallback-secret';
+    const secretKey = process.env.JWT_SECRET || 'fallback-secret';
     const decoded = jwt.verify(token, secretKey);
     next();
   } catch (error) {
