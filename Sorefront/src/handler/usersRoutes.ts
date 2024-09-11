@@ -8,7 +8,7 @@ dotenv.config();
 
 const usersModel = new usersTable();
 
-const index = async (req: Request, res: Response) => {
+const index = async (_req: Request, res: Response) => {
   try {
     const ListOfProducts = await usersModel.index();
     res.json(ListOfProducts);
