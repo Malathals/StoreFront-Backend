@@ -60,5 +60,5 @@ const create = async (req: Request, res: Response) => {
 export const userRoutes = (app: express.Application) => {
   app.get('/users', verifyToken, index);
   app.get('/users/:id', verifyToken, show);
-  app.post('/createUser', verifyToken, create);
+  app.post('/createUser', create);
 };
