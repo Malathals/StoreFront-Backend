@@ -12,8 +12,11 @@
   "test": {
     "driver": "pg",
     "host": "dpg-crbi6ht6l47c73d64cgg-a.oregon-postgres.render.com",
-    "database": "Storefront",
+    "database": "Storefront-test",
     "user": "malath",
-    "password": "1234"
+    "password": "1234",
+    "ssl": {
+      "rejectUnauthorized": false
+    }
   }
 }

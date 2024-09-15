@@ -3,26 +3,17 @@ import { Pool } from 'pg';
 
 dotenv.config();
 
-const { HOST, DB_NAME, USER, PASSWORD } = process.env;
+const { HOST, DB_NAME, USER, PASSWORD, DB_NAME_TEST, NODE_ENV } = process.env;
+const database = NODE_ENV === 'test' ? DB_NAME_TEST : DB_NAME;
 
 const pool = new Pool({
   host: HOST,
-  database: DB_NAME,
+  database: database,
   user: USER,
   password: PASSWORD,
   ssl: {
     rejectUnauthorized: false,
   },
 });
-
-pool
-  .connect()
-  .then((client) => {
-    console.log('Connection has been established successfully.');
-    client.release();
-  })
-  .catch((err) => {
-    console.error('Unable to connect to the database:', err);
-  });
 
 export default pool;

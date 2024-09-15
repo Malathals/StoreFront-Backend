@@ -2,12 +2,17 @@ import { app } from '../index';
 import superTest from 'supertest';
 import jwt from 'jsonwebtoken';
 import { productTable } from '../models/product';
+import { usersTable } from '../models/users';
+import { OrderTable } from '../models/order';
+import pool from '../database';
 
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const productModel = new productTable();
+const userModel = new usersTable();
+const orderModel = new OrderTable();
 
 const request = superTest(app);
 
@@ -16,13 +21,27 @@ const token = jwt.sign(
   process.env.JWT_SECRET as string,
 );
 
+//Test the db connection
+
+describe('Database Connection', () => {
+  it('should establish a successful connection to the database', async () => {
+    try {
+      const client = await pool.connect();
+      expect(client).toBeDefined();
+      client.release();
+    } catch (error) {
+      console.error('Unable to connect to the database:', error);
+    }
+  });
+});
+
 // Test the /createProduct endpoint
 
 describe('create product API', () => {
   it('create method should add a product', async () => {
     const newProduct = {
-      name: 'MacBook',
-      price: 1200,
+      name: 'phone18',
+      price: 5000,
       category: 'Electronics',
     };
 
@@ -31,11 +50,10 @@ describe('create product API', () => {
       .set('Authorization', `Bearer ${token}`)
       .send(newProduct);
 
-    //please note you need to increment the id one in each run
     const expectedResult = {
-      id: 28,
-      name: 'MacBook',
-      price: 1200,
+      id: 11,
+      name: 'phone18',
+      price: 500,
       category: 'Electronics',
     };
     expect(response.body).toEqual(expectedResult);
@@ -56,8 +74,13 @@ it('gets the /products/:id endpoint', async () => {
   expect(response.status).toBe(200);
 });
 
-it('should have a update method', () => {
+it('should have a create method', () => {
   expect(productModel.create).toBeDefined();
+});
+
+it('show method should return the correct product', async () => {
+  const result = await productModel.show(1);
+  expect(result.name).toBe('Laptop');
 });
 
 //----------------------------------------------
@@ -92,21 +115,29 @@ describe('User API', () => {
 describe('create user API', () => {
   it('create method should add a user', async () => {
     const newUser = {
-      first_name: 'saud',
-      last_name: 'salih',
+      first_name: 'njoud',
+      last_name: 'saud',
       password: '123456',
     };
 
-    const response = await request
-      .post('/createUser')
-      .set('Authorization', `Bearer ${token}`)
-      .send(newUser);
+    const response = await request.post('/createUser').send(newUser);
 
     expect(response.status).toBe(201);
   });
 });
 
+//Test the user model
+describe('User Model', () => {
+  // Test the index method (getting all users)
+  it('index method should return a list of users', async () => {
+    const result = await userModel.index();
+    expect(result).toBeInstanceOf(Array);
+    expect(result.length).toBeGreaterThan(0);
+  });
+});
+
 //----------------------------------------------
+
 //test /order/:user_id
 describe('User order API', () => {
   it('index method should return a current order fot the ID', async () => {
@@ -127,5 +158,13 @@ describe('User order API', () => {
       },
     ];
     expect(response.body).toEqual(expectedResult);
+  });
+});
+
+describe('Order Model', () => {
+  it('currentOrder method should return the active orders for the user', async () => {
+    const result = await orderModel.currentOrder(1);
+    expect(result).toBeInstanceOf(Array);
+    expect(result[0].status).toBe('active');
   });
 });
